@@ -30,6 +30,10 @@ namespace TasiYokan.Audio
             }
         }
 
+        /// <summary>
+        /// Whenever AudioSource's clip is not null, 
+        /// we assume it is goint to play or under looping
+        /// </summary>
         public bool IsBusy
         {
             get
@@ -58,7 +62,6 @@ namespace TasiYokan.Audio
         public void ClearAudioClip()
         {
             MainSource.clip = null;
-            
         }
 
         public void Play(bool _isForced)

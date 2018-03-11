@@ -49,16 +49,18 @@ public class AudioSceneTester : MonoBehaviour
         //    .Play();
 
         // Test pause
-        //BaseAudio audio = new SingleAudio("Voice_Ringing");
-        //audio.Play();
-        //StartCoroutine(Pause(audio));
+        BaseAudio audio = new SingleAudio("Voice_Ringing");
+        audio.Play();
+        StartCoroutine(Pause(audio));
     }
 
     IEnumerator Pause(BaseAudio _audio)
     {
         yield return new WaitForSeconds(0.4f);
+        print("Pause");
         _audio.Pause();
         yield return new WaitForSeconds(2);
+        print("Unpause");
         _audio.Unpause();
     }
 

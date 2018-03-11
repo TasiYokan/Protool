@@ -11,7 +11,7 @@ namespace TasiYokan.Audio
     {
         internal List<string> m_clipNames;
         internal List<AudioClip> m_clips;
-        private int m_lastSampleStamp;
+        //private int m_lastSampleStamp;
 
         public RandomAudio(string _prefixName, AudioLayerType _layer = AudioLayerType.Undefined)
         {
@@ -37,14 +37,14 @@ namespace TasiYokan.Audio
             if (m_audioPlayer.IsPaused())
                 return true;
 
+            //m_lastSampleStamp = m_audioPlayer.MainSource.timeSamples;
+
             if (m_loopTimes == 1)
             {
-                m_lastSampleStamp = m_audioPlayer.MainSource.timeSamples;
                 return m_audioPlayer.IsClipPlaying(m_currentClip);
             }
-            else if (m_loopTimes < 1)
+            else if (m_loopTimes <= 0)
             {
-                m_lastSampleStamp = m_audioPlayer.MainSource.timeSamples;
                 if (m_audioPlayer.IsBeforeEnd())
                 {
                     return true;
@@ -68,7 +68,10 @@ namespace TasiYokan.Audio
             else
             {
                 // We assume when timesample Has back from n to 0 denotes it rewinds to the head
-                if (m_audioPlayer.MainSource.timeSamples < m_lastSampleStamp)
+                //if (m_audioPlayer.MainSource.timeSamples < m_lastSampleStamp)
+
+                // Will exceed the end after this sample
+                if(m_audioPlayer.IsBeforeEnd() == false)
                 {
                     m_loopedTimes++;
                     onEveryComplete();
@@ -81,10 +84,10 @@ namespace TasiYokan.Audio
                     }
                 }
 
-                m_lastSampleStamp = m_audioPlayer.MainSource.timeSamples;
                 if (m_loopedTimes >= m_loopTimes)
                 {
-                    m_audioPlayer.MainSource.Stop();
+                    // We will do it after onComplete in BaseAudio
+                    //m_audioPlayer.MainSource.Stop();
                     return false;
                 }
                 else
