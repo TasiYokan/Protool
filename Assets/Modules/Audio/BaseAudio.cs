@@ -49,7 +49,7 @@ namespace TasiYokan.Audio
             }
 
             AudioManager.Instance.StartCoroutine(
-                PlaySound(m_loopTimes < 0 || m_loopTimes > 1));
+                Playing(m_loopTimes < 0 || m_loopTimes > 1));
         }
 
         public virtual void Stop()
@@ -58,6 +58,7 @@ namespace TasiYokan.Audio
                 m_audioPlayer.Stop();
         }
 
+        // TODO: Check if it's still under delay?
         public virtual void Pause()
         {
             if (m_audioPlayer.MainSource.clip == m_currentClip)
@@ -70,19 +71,25 @@ namespace TasiYokan.Audio
                 m_audioPlayer.UnPause();
         }
 
-        protected virtual IEnumerator PlaySound(bool _isLoop)
+        protected virtual IEnumerator Playing(bool _isLoop)
         {
             m_audioPlayer.SetSettings(_isLoop);
 
             // Debug.Log("PlaySound " + m_clipName);
             m_loopedTimes = 0;
-            if (onStart != null)
-                onStart();
 
             if (m_delay > 0)
                 m_audioPlayer.PlayDelayed(m_delay, m_isForced);
             else
                 m_audioPlayer.Play(m_isForced);
+
+            while (m_audioPlayer.MainSource.timeSamples < AudioPlayer.BufferLength * m_delay)
+            {
+                yield return null;
+            }
+            // Invoke onStart only when it actually start playing
+            if (onStart != null)
+                onStart();
 
             yield return new WaitForAudioEnd(this);
 

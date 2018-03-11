@@ -15,7 +15,7 @@ namespace TasiYokan.Audio
     public class AudioPlayer : MonoBehaviour
     {
         private AudioSource m_mainSource;
-        private int m_bufferLength;
+        private static int m_bufferLength;
 
         public AudioSource MainSource
         {
@@ -42,15 +42,25 @@ namespace TasiYokan.Audio
             }
         }
 
+        public static int BufferLength
+        {
+            get
+            {
+                if (m_bufferLength == 0)
+                {
+                    // We need to know the dsp buffer size so we can schedule playback correctly
+                    // AudioSettings.GetDSPBufferSize is effectively a forwarded call 
+                    // to FMOD::System::getDSPBufferSize. It defaults to 1024 sample frames on PC.
+                    int numBuffers;
+                    AudioSettings.GetDSPBufferSize(out m_bufferLength, out numBuffers);
+                }
+                return m_bufferLength;
+            }
+        }
+
         public void Init()
         {
             m_mainSource = gameObject.AddComponent<AudioSource>();
-
-            // We need to know the dsp buffer size so we can schedule playback correctly
-            // AudioSettings.GetDSPBufferSize is effectively a forwarded call 
-            // to FMOD::System::getDSPBufferSize. It defaults to 1024 sample frames on PC.
-            int numBuffers;
-            AudioSettings.GetDSPBufferSize(out m_bufferLength, out numBuffers);
         }
 
         public void SetSettings(bool _isLoop)
@@ -124,7 +134,7 @@ namespace TasiYokan.Audio
             //Debug.Log("main sample " + m_main.timeSamples + " clip samples " + _clip.samples);
 
             //return m_main.time < _clip.length - 0.01f;
-            return m_mainSource.timeSamples + m_bufferLength < m_mainSource.clip.samples;
+            return m_mainSource.timeSamples + BufferLength < m_mainSource.clip.samples;
         }
 
         public bool IsAtEnd()

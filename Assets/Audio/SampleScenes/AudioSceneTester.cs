@@ -29,15 +29,15 @@ public class AudioSceneTester : MonoBehaviour
 
         //sound.Play();
 
-        new RandomAudio("Alarm", AudioLayerType.Bgm)
-            .SetForce(false)
-            .SetLoop(3)
-            .OnEveryComplete(() => print("Finish a loop!"))
-            .OnComplete(() =>
-            {
-                print("Complete 3 random loops");
-            })
-            .Play();
+        //new RandomAudio("Alarm", AudioLayerType.Bgm)
+        //    .SetForce(false)
+        //    .SetLoop(3)
+        //    .OnEveryComplete(() => print("Finish a loop!"))
+        //    .OnComplete(() =>
+        //    {
+        //        print("Complete 3 random loops");
+        //    })
+        //    .Play();
 
         //new SingleAudio("Warning")
         //    .OnEveryComplete(() => print("Finish a loop!"))
@@ -49,7 +49,9 @@ public class AudioSceneTester : MonoBehaviour
         //    .Play();
 
         // Test pause
-        BaseAudio audio = new SingleAudio("Voice_Ringing");
+        BaseAudio audio = new SingleAudio("Voice_Ringing")
+            .SetDelay(1f)
+            .OnStart(() => print("Start from delay"));
         audio.Play();
         StartCoroutine(Pause(audio));
     }
