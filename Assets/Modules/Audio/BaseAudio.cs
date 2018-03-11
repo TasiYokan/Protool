@@ -26,7 +26,7 @@ namespace TasiYokan.Audio
         internal protected AudioPlayer m_audioPlayer;
         internal protected AudioClip m_currentClip;
         internal protected float m_delay = 0;
-        internal protected AudioLayer m_layer = AudioLayer.Bgm;
+        internal protected AudioLayerType m_layer = AudioLayerType.Bgm;
         internal protected int m_loopTimes = 1;
         internal protected bool m_isForced = true;
         internal protected int m_loopedTimes = 0;

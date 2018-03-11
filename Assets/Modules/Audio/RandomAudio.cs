@@ -13,13 +13,13 @@ namespace TasiYokan.Audio
         internal List<AudioClip> m_clips;
         private int m_lastSampleStamp;
 
-        public RandomAudio(string _prefixName, AudioLayer _layer = AudioLayer.Undefined)
+        public RandomAudio(string _prefixName, AudioLayerType _layer = AudioLayerType.Undefined)
         {
             m_clipNames = GetAllAvailableClipNames(_prefixName);
             Assert.IsTrue(m_clipNames.Count > 0, "Could find any sounds with prefixName: " + _prefixName);
             m_clips = AudioManager.Instance.GetAudioClips(m_clipNames);
             m_layer = _layer;
-            m_audioPlayer = AudioManager.Instance.GetAudioPlayer(m_layer);
+            m_audioPlayer = AudioManager.Instance.GetLayer(_layer).AddAudio(this);
         }
 
         private List<string> GetAllAvailableClipNames(string _prefixName)

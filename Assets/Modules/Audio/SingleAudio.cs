@@ -10,16 +10,16 @@ namespace TasiYokan.Audio
         internal String m_clipName;
         private float m_lastTimeStamp;
 
-        public SingleAudio(string _clipName, AudioLayer _layer = AudioLayer.Undefined)
+        public SingleAudio(string _clipName, AudioLayerType _layer = AudioLayerType.Undefined)
         {
             m_clipName = _clipName;
             m_currentClip = AudioManager.Instance.GetAudioClip(m_clipName);
             m_layer = _layer;
-            m_audioPlayer = AudioManager.Instance.GetAudioPlayer(m_layer);
+            m_audioPlayer = AudioManager.Instance.GetLayer(_layer).AddAudio(this);
         }
 
         public SingleAudio(string _clipName, string _layerName)
-            : this(_clipName, (AudioLayer)Enum.Parse(typeof(AudioLayer), _layerName)) { }
+            : this(_clipName, (AudioLayerType)Enum.Parse(typeof(AudioLayerType), _layerName)) { }
         
         public override bool WaitToComplete()
         {

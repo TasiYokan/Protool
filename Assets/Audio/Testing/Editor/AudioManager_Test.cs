@@ -31,14 +31,14 @@ public class AudioManager_Test
 
         Assert.IsNotNull(mgr);
 
-        Assert.AreEqual(6, mgr.AllAudioNames.Count);
-        Assert.AreEqual(2, mgr.InbuiltAudioPlayers.Count);
+        Assert.AreEqual(8, mgr.AllAudioNames.Count);
+        Assert.AreEqual(2, mgr.InbuiltLayers.Count);
     }
 
     [Test]
     public void GetAudioClip_FirstTime_UpdateAudioDict()
     {
-        string clipName = "BunnyHelp";
+        string clipName = "Voice_Ringing";
         AudioClip clip = AudioManager.Instance.GetAudioClip(clipName);
 
         Assert.IsNotNull(clip);
@@ -48,7 +48,7 @@ public class AudioManager_Test
     [Test]
     public void GetAudioClips_FirstTime_UpdateAudioDict()
     {
-        List<string> clipNames = new List<string>(){ "Random_Jelly_1", "Random_Jelly_2", "Random_Jelly_3", "Random_Jelly_4" };
+        List<string> clipNames = new List<string>(){ "Alarm01", "Alarm02", "Alarm03", "Alarm04" };
         List<AudioClip> clips = AudioManager.Instance.GetAudioClips(clipNames);
 
         Assert.IsTrue(clips.Count == 4);
@@ -57,49 +57,49 @@ public class AudioManager_Test
     [Test]
     public void GetAudioPlayer_Undefined_SpawnNew()
     {
-        Assert.AreEqual(0, AudioManager.Instance.RuntimeAudioPlayers.Count);
+        Assert.AreEqual(0, AudioManager.Instance.RuntimeLayers.Count);
 
-        AudioPlayer player = AudioManager.Instance.GetAudioPlayer();
-        Assert.IsNotNull(player);
+        AudioLayer layer = AudioManager.Instance.GetLayer();
+        Assert.IsNotNull(layer);
 
-        Assert.AreEqual(1, AudioManager.Instance.RuntimeAudioPlayers.Count);
+        Assert.AreEqual(1, AudioManager.Instance.RuntimeLayers.Count);
     }
 
     [Test]
     public void GetAudioPlayer_Undefined_GetExisting()
     {
-        AudioPlayer player = AudioManager.Instance.GetAudioPlayer();
-        Assert.IsNotNull(player);
+        AudioLayer layer = AudioManager.Instance.GetLayer();
+        Assert.IsNotNull(layer);
 
-        Assert.AreEqual(1, AudioManager.Instance.RuntimeAudioPlayers.Count);
+        Assert.AreEqual(1, AudioManager.Instance.RuntimeLayers.Count);
 
-        AudioPlayer anotherPlayer = AudioManager.Instance.GetAudioPlayer();
-        Assert.IsNotNull(anotherPlayer);
-        Assert.AreEqual(1, AudioManager.Instance.RuntimeAudioPlayers.Count);
+        AudioLayer anotherLayer = AudioManager.Instance.GetLayer();
+        Assert.IsNotNull(anotherLayer);
+        Assert.AreEqual(2, AudioManager.Instance.RuntimeLayers.Count);
     }
 
     [Test]
     public void GetAudioPlayer_Undefined_GetExistingPlaying_Fail()
     {
-        new SingleAudio("BunnyHelp").Play();
+        new SingleAudio("Warning").Play();
 
-        Assert.AreEqual(1, AudioManager.Instance.RuntimeAudioPlayers.Count);
+        Assert.AreEqual(1, AudioManager.Instance.RuntimeLayers.Count);
 
-        AudioPlayer anotherPlayer = AudioManager.Instance.GetAudioPlayer();
-        Assert.IsNotNull(anotherPlayer);
-        Assert.AreEqual(2, AudioManager.Instance.RuntimeAudioPlayers.Count);
+        AudioLayer anotherLayer = AudioManager.Instance.GetLayer();
+        Assert.IsNotNull(anotherLayer);
+        Assert.AreEqual(2, AudioManager.Instance.RuntimeLayers.Count);
     }
 
     [Test]
     public void GetAudioPlayer_InbuiltLayer_Success()
     {
-        Assert.IsNotNull(AudioManager.Instance.GetAudioPlayer(AudioLayer.Bgm));
+        Assert.IsNotNull(AudioManager.Instance.GetLayer(AudioLayerType.Bgm));
     }
 
     [Test]
     public void GetAudioPlayer_RuntimeLayer_Success()
     {
-        new SingleAudio("BunnyHelp").Play();
+        new SingleAudio("Warning").Play();
 
         //Assert.IsNotNull(AudioManager.Instance.GetAudioPlayer());
     }

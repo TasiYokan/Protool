@@ -29,7 +29,7 @@ public class AudioSceneTester : MonoBehaviour
 
         //sound.Play();
 
-        new RandomAudio("Alarm", AudioLayer.Bgm)
+        new RandomAudio("Alarm", AudioLayerType.Bgm)
             .SetForce(false)
             .SetLoop(3)
             .OnEveryComplete(() => print("Finish a loop!"))

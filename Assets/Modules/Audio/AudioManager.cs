@@ -10,7 +10,7 @@ namespace TasiYokan.Audio
 {
     public delegate void AudioCallback();
 
-    public enum AudioLayer
+    public enum AudioLayerType
     {
         Undefined = -9999,
         Bgm = -1,
@@ -41,9 +41,9 @@ namespace TasiYokan.Audio
         private static AudioManager m_instance;
         private Dictionary<string, AudioClip> m_audioDict;
         private List<string> m_allAudioNames;
-
-        private List<AudioPlayer> m_inbuiltAudioPlayers;
-        private List<AudioPlayer> m_runtimeAudioPlayers;
+        
+        private List<AudioLayer> m_inbuiltLayers;
+        private List<AudioLayer> m_runtimeLayers;
 
         public static AudioManager Instance
         {
@@ -92,33 +92,33 @@ namespace TasiYokan.Audio
             }
         }
 
-        public List<AudioPlayer> InbuiltAudioPlayers
+        public List<AudioLayer> InbuiltLayers
         {
             get
             {
-                if (m_inbuiltAudioPlayers == null)
-                    m_inbuiltAudioPlayers = new List<AudioPlayer>();
-                return m_inbuiltAudioPlayers;
+                if (m_inbuiltLayers == null)
+                    m_inbuiltLayers = new List<AudioLayer>();
+                return m_inbuiltLayers;
             }
 
             set
             {
-                m_inbuiltAudioPlayers = value;
+                m_inbuiltLayers = value;
             }
         }
 
-        public List<AudioPlayer> RuntimeAudioPlayers
+        public List<AudioLayer> RuntimeLayers
         {
             get
             {
-                if (m_runtimeAudioPlayers == null)
-                    m_runtimeAudioPlayers = new List<AudioPlayer>();
-                return m_runtimeAudioPlayers;
+                if (m_runtimeLayers == null)
+                    m_runtimeLayers = new List<AudioLayer>();
+                return m_runtimeLayers;
             }
 
             set
             {
-                m_runtimeAudioPlayers = value;
+                m_runtimeLayers = value;
             }
         }
 
@@ -138,11 +138,11 @@ namespace TasiYokan.Audio
         private void Init()
         {
             ReadAllAudioList();
-
+            
             // Bgm
-            InitInbuiltAudioSource(AudioLayer.Bgm);
+            InitInbuiltLayer(AudioLayerType.Bgm);
             // Dialogue
-            InitInbuiltAudioSource(AudioLayer.Dialogue);
+            InitInbuiltLayer(AudioLayerType.Dialogue);
         }
 
         /// <summary>
@@ -186,13 +186,6 @@ namespace TasiYokan.Audio
             //}
         }
 
-        private AudioPlayer InitInbuiltAudioSource(AudioLayer _layer)
-        {
-            AudioPlayer player = SpawnAudioPlayer(_layer.ToString());
-            InbuiltAudioPlayers.Add(player);
-            return player;
-        }
-
         public AudioClip GetAudioClip(string _name)
         {
             if (AudioDict.ContainsKey(_name) == false)
@@ -216,52 +209,61 @@ namespace TasiYokan.Audio
 
             return clips;
         }
-
-        public AudioPlayer GetAudioPlayer(AudioLayer _layer = AudioLayer.Undefined)
+        
+        private AudioLayer CreateLayer(string _layerName = "")
         {
-            if (_layer == AudioLayer.Undefined)
+            //string layerName = _layerName != "" ? _layerName : "Runtime Layer " + RuntimeLayers.Count;
+            GameObject layerObj = new GameObject(_layerName);
+            layerObj.transform.SetParent(transform);
+
+            AudioLayer layer = layerObj.AddComponent<AudioLayer>();
+            layer.Init();
+
+            //if (_layerName == "")
+            //    RuntimeLayers.Add(layer);
+
+            return layer;
+        }
+
+        private AudioLayer InitInbuiltLayer(AudioLayerType _layerType)
+        {
+            AudioLayer layer = CreateLayer(_layerType.ToString());
+            InbuiltLayers.Add(layer);
+
+            return layer;
+        }
+
+        private AudioLayer InitRuntimeLayer()
+        {
+            AudioLayer layer = CreateLayer("Runtime Layer " + RuntimeLayers.Count);
+            RuntimeLayers.Add(layer);
+
+            return layer;
+        }
+
+        public AudioLayer GetLayer(AudioLayerType _layerType = AudioLayerType.Undefined)
+        {
+            if (_layerType == AudioLayerType.Undefined)
             {
-                return SearchAudioPlayerInPool() ?? SpawnAudioPlayer();
-            }
-            else if (_layer < 0)
-            {
-                // Should also start from 0 instead of -1
-                return InbuiltAudioPlayers[-(int)_layer - 1];
+                return InitRuntimeLayer();
             }
             else
             {
-                return RuntimeAudioPlayers[(int)_layer];
+                return GetLayer((int)_layerType);
             }
         }
 
-        private AudioPlayer SearchAudioPlayerInPool()
+        public AudioLayer GetLayer(int _layerType)
         {
-            foreach (var player in RuntimeAudioPlayers)
+            if (_layerType < 0)
             {
-                if (player.IsBusy == false)
-                {
-                    return player;
-                    // Set it as busy
-                }
+                // Should also start from 0 instead of -1
+                return InbuiltLayers[-(int)_layerType - 1];
             }
-
-            return null;
-        }
-
-        private AudioPlayer SpawnAudioPlayer(string _playerName = "")
-        {
-            GameObject playerObj = GameObject.Instantiate(
-                Resources.Load<GameObject>("AudioPlayer_Pref"));
-
-            AudioPlayer player = playerObj.GetComponent<AudioPlayer>();
-            player.Init();
-            playerObj.transform.SetParent(transform);
-            if (_playerName == "")
-                RuntimeAudioPlayers.Add(player);
-
-            playerObj.name = _playerName != "" ? _playerName : "Runtime Audio Player " + RuntimeAudioPlayers.Count;
-
-            return player;
+            else
+            {
+                return RuntimeLayers[(int)_layerType];
+            }
         }
     }
 }
