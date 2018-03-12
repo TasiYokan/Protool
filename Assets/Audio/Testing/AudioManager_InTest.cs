@@ -4,22 +4,8 @@ using NUnit.Framework;
 using System.Collections;
 using TasiYokan.Audio;
 
-public class AudioManager_InTest {
-
-	[Test]
-	public void AudioManager_InTestSimplePasses() {
-		// Use the Assert class to test conditions.
-	}
-
-	// A UnityTest behaves like a coroutine in PlayMode
-	// and allows you to yield null to skip a frame in EditMode
-	[UnityTest]
-	public IEnumerator AudioManager_InTestWithEnumeratorPasses() {
-		// Use the Assert class to test conditions.
-		// yield to skip a frame
-		yield return null;
-	}
-
+public class AudioManager_InTest
+{
     [UnityTest]
     public IEnumerator Play_ActualStart_AfterSeconds()
     {
@@ -56,5 +42,20 @@ public class AudioManager_InTest {
         yield return null;
 
         Assert.AreEqual(true, flag);
+    }
+
+    [UnityTest]
+    public IEnumerator Fade_From0To1_FadeIn()
+    {
+        SingleAudio audio = new SingleAudio("Warning").SetLoop(-1);
+        audio.Play();
+
+        audio.Fade(0, 1, 2);
+
+        Assert.AreEqual(0, audio.AudioPlayer.MainSource.volume.Sgn());
+
+        yield return new WaitForSeconds(2);
+        
+        Assert.AreEqual(0, (audio.AudioPlayer.MainSource.volume - 1).Sgn());
     }
 }

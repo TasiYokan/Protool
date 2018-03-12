@@ -23,14 +23,22 @@ namespace TasiYokan.Audio
         /// Called everytime finished a loop
         /// </summary>
         public AudioCallback onEveryComplete;
-        internal protected AudioPlayer m_audioPlayer;
-        internal protected AudioClip m_currentClip;
-        internal protected float m_delay = 0;
-        internal protected AudioLayerType m_layer = AudioLayerType.Bgm;
-        internal protected int m_loopTimes = 1;
-        internal protected bool m_isForced = true;
-        internal protected int m_loopedTimes = 0;
+        protected internal AudioPlayer m_audioPlayer;
+        protected internal AudioClip m_currentClip;
+        protected internal float m_delay = 0;
+        protected internal AudioLayerType m_layer = AudioLayerType.Bgm;
+        protected internal int m_loopTimes = 1;
+        protected internal bool m_isForced = true;
+        protected internal int m_loopedTimes = 0;
         private Coroutine m_currentFading;
+
+        public AudioPlayer AudioPlayer
+        {
+            get
+            {
+                return m_audioPlayer;
+            }
+        }
 
         public abstract bool WaitToComplete();
         protected abstract void FeedAudioPlayer();

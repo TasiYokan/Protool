@@ -6,6 +6,7 @@ using TasiYokan.Audio;
 public class AudioLayer : MonoBehaviour
 {
     private List<AudioPlayer> m_players;
+    //private List<BaseAudio> m_audios;
 
     public List<AudioPlayer> Players
     {
@@ -15,12 +16,17 @@ public class AudioLayer : MonoBehaviour
                 m_players = new List<AudioPlayer>();
             return m_players;
         }
-
-        set
-        {
-            m_players = value;
-        }
     }
+
+    //public List<BaseAudio> Audios
+    //{
+    //    get
+    //    {
+    //        if (m_audios == null)
+    //            m_audios = new List<BaseAudio>();
+    //        return m_audios;
+    //    }
+    //}
 
     public void Init()
     {
@@ -46,7 +52,7 @@ public class AudioLayer : MonoBehaviour
             }
         }
 
-        return null;
+        return CreateAudioPlayer();
     }
 
     /// <summary>
