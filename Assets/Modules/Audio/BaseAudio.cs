@@ -83,10 +83,7 @@ namespace TasiYokan.Audio
             else
                 m_audioPlayer.Play(m_isForced);
 
-            while (m_audioPlayer.MainSource.timeSamples < AudioPlayer.BufferLength * m_delay)
-            {
-                yield return null;
-            }
+            yield return new WaitForAudioStart(this);
             // Invoke onStart only when it actually start playing
             if (onStart != null)
                 onStart();

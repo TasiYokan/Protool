@@ -50,15 +50,15 @@ public class AudioSceneTester : MonoBehaviour
 
         // Test pause
         BaseAudio audio = new SingleAudio("Voice_Ringing")
-            .SetDelay(1f)
+            .SetDelay(2f)
             .OnStart(() => print("Start from delay"));
         audio.Play();
-        StartCoroutine(Pause(audio));
+        //StartCoroutine(Pause(audio));
     }
 
     IEnumerator Pause(BaseAudio _audio)
     {
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.5f);
         print("Pause");
         _audio.Pause();
         yield return new WaitForSeconds(2);

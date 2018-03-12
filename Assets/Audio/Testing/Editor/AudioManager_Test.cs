@@ -6,8 +6,18 @@ using System.Collections;
 using TasiYokan.Audio;
 using System.Collections.Generic;
 
-public class AudioManager_Test
+public class AudioManager_Test : IPrebuildSetup, IPostBuildCleanup
 {
+    public void Setup()
+    {
+        //Debug.Log("Setup for whole class");
+    }
+
+    public void Cleanup()
+    {
+        //Debug.Log("Cleanup for whole class");
+    }
+
     // A UnityTest behaves like a coroutine in PlayMode
     // and allows you to yield null to skip a frame in EditMode
     [UnityTest]
@@ -48,14 +58,14 @@ public class AudioManager_Test
     [Test]
     public void GetAudioClips_FirstTime_UpdateAudioDict()
     {
-        List<string> clipNames = new List<string>(){ "Alarm01", "Alarm02", "Alarm03", "Alarm04" };
+        List<string> clipNames = new List<string>() { "Alarm01", "Alarm02", "Alarm03", "Alarm04" };
         List<AudioClip> clips = AudioManager.Instance.GetAudioClips(clipNames);
 
         Assert.IsTrue(clips.Count == 4);
     }
 
     [Test]
-    public void GetAudioPlayer_Undefined_SpawnNew()
+    public void GetLayer_Undefined_SpawnNew()
     {
         Assert.AreEqual(0, AudioManager.Instance.RuntimeLayers.Count);
 
@@ -66,7 +76,7 @@ public class AudioManager_Test
     }
 
     [Test]
-    public void GetAudioPlayer_Undefined_GetExisting()
+    public void GetLayer_Undefined_GetExisting()
     {
         AudioLayer layer = AudioManager.Instance.GetLayer();
         Assert.IsNotNull(layer);
@@ -79,7 +89,7 @@ public class AudioManager_Test
     }
 
     [Test]
-    public void GetAudioPlayer_Undefined_GetExistingPlaying_Fail()
+    public void GetLayer_Undefined_GetExistingPlaying_Fail()
     {
         new SingleAudio("Warning").Play();
 
@@ -91,16 +101,16 @@ public class AudioManager_Test
     }
 
     [Test]
-    public void GetAudioPlayer_InbuiltLayer_Success()
+    public void GetLayer_InbuiltLayer_Success()
     {
         Assert.IsNotNull(AudioManager.Instance.GetLayer(AudioLayerType.Bgm));
     }
 
     [Test]
-    public void GetAudioPlayer_RuntimeLayer_Success()
+    public void GetLayer_RuntimeLayer_Success()
     {
         new SingleAudio("Warning").Play();
 
-        //Assert.IsNotNull(AudioManager.Instance.GetAudioPlayer());
+        //Assert.IsNotNull(AudioManager.Instance.GetLayer());
     }
 }
