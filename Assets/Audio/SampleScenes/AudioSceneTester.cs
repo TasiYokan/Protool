@@ -56,10 +56,16 @@ public class AudioSceneTester : MonoBehaviour
         //StartCoroutine(Pause(audio));
 
         // Test Fade
-        BaseAudio fadedAudio = new SingleAudio("Voice_Ringing").SetLoop(-1);
-        fadedAudio.Play();
-        //fadedAudio.Fade(0, 1, 5);
-        StartCoroutine(YoyoFade(fadedAudio));
+        //BaseAudio fadedAudio = new SingleAudio("Voice_Ringing").SetLoop(-1);
+        //fadedAudio.Play();
+        ////fadedAudio.Fade(0, 1, 5);
+        //StartCoroutine(YoyoFade(fadedAudio));
+
+        // Test Fade
+        BaseAudio crossFadeAudio = new SingleAudio("Voice_Ringing")
+            .SetLoop(-1);
+        crossFadeAudio.Play();
+        StartCoroutine(CrossFade(crossFadeAudio));
     }
 
     IEnumerator Pause(BaseAudio _audio)
@@ -83,6 +89,15 @@ public class AudioSceneTester : MonoBehaviour
         yield return new WaitForSeconds(2);
 
         _audio.Fade(0, 1, 3);
+    }
+
+    IEnumerator CrossFade(BaseAudio _audio)
+    {
+        yield return new WaitForSeconds(3);
+
+        _audio.SetCrossFade();
+        _audio.FeedNewAudioPlayer(AudioManager.Instance.GetAudioClip("Warning"));
+        _audio.CrossFade(0, 1, 5);
     }
 
     // Update is called once per frame

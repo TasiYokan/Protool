@@ -62,5 +62,19 @@ namespace TasiYokan.Audio
             _container.m_isForced = _isForce;
             return _container;
         }
+
+        /// <summary>
+        /// Store current audioSource to <see cref="AudioPlayer.SecondSource"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_container"></param>
+        /// <param name="_isForce"></param>
+        /// <returns></returns>
+        public static T SetCrossFade<T>(this T _container, bool _isCorssFade = true) where T : BaseAudio
+        {
+            if (_isCorssFade)
+                _container.AudioPlayer.SetSecondSource(_container.AudioPlayer.MainSource);
+            return _container;
+        }
     }
 }

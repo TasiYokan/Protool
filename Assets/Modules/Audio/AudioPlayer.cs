@@ -15,6 +15,10 @@ namespace TasiYokan.Audio
     public class AudioPlayer : MonoBehaviour
     {
         private AudioSource m_mainSource;
+        /// <summary>
+        /// A temp place to store extra track
+        /// </summary>
+        private AudioSource m_secondSource;
         private static int m_bufferLength;
 
         public AudioSource MainSource
@@ -27,6 +31,14 @@ namespace TasiYokan.Audio
             set
             {
                 m_mainSource = value;
+            }
+        }
+
+        public AudioSource SecondSource
+        {
+            get
+            {
+                return m_secondSource;
             }
         }
 
@@ -61,6 +73,7 @@ namespace TasiYokan.Audio
         public void Init()
         {
             m_mainSource = gameObject.AddComponent<AudioSource>();
+            m_secondSource = gameObject.AddComponent<AudioSource>();
         }
 
         public void SetSettings(bool _isLoop)
@@ -72,6 +85,20 @@ namespace TasiYokan.Audio
         public void ClearAudioClip()
         {
             MainSource.clip = null;
+        }
+
+        public void SetSecondSource(AudioSource _source)
+        {
+            m_secondSource.clip = _source.clip;
+            m_secondSource.playOnAwake = _source.playOnAwake;
+            m_secondSource.loop = _source.loop;
+            m_secondSource.timeSamples = _source.timeSamples;
+            m_secondSource.Play();
+        }
+
+        public void ClearSecondAudioClip()
+        {
+            m_secondSource.clip = null;
         }
 
         public void Play(bool _isForced)
