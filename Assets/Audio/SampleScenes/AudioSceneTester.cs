@@ -49,11 +49,17 @@ public class AudioSceneTester : MonoBehaviour
         //    .Play();
 
         // Test pause
-        BaseAudio audio = new SingleAudio("Voice_Ringing")
-            .SetDelay(2f)
-            .OnStart(() => print("Start from delay"));
-        audio.Play();
+        //BaseAudio audio = new SingleAudio("Voice_Ringing")
+        //    .SetDelay(2f)
+        //    .OnStart(() => print("Start from delay"));
+        //audio.Play();
         //StartCoroutine(Pause(audio));
+
+        // Test Fade
+        BaseAudio fadedAudio = new SingleAudio("Voice_Ringing").SetLoop(-1);
+        fadedAudio.Play();
+        //fadedAudio.Fade(0, 1, 5);
+        StartCoroutine(YoyoFade(fadedAudio));
     }
 
     IEnumerator Pause(BaseAudio _audio)
@@ -64,6 +70,19 @@ public class AudioSceneTester : MonoBehaviour
         yield return new WaitForSeconds(2);
         print("Unpause");
         _audio.Unpause();
+    }
+
+    IEnumerator YoyoFade(BaseAudio _audio)
+    {
+         _audio.Fade(0, 1, 3);
+
+        yield return new WaitForSeconds(3);
+
+        _audio.Fade(1, 0, 3);
+
+        yield return new WaitForSeconds(2);
+
+        _audio.Fade(0, 1, 3);
     }
 
     // Update is called once per frame

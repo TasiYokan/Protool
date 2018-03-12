@@ -56,7 +56,8 @@ namespace TasiYokan.Audio
                     // If we want let it call the onComplete() only once which will nullify AudioClip on player after continuing coroutine
                     //return false;
 
-                    onEveryComplete();
+                    if (onEveryComplete != null)
+                        onEveryComplete();
 
                     //TODO: Find a way to move it into BaseAudio
                     FeedAudioPlayer();
@@ -71,10 +72,11 @@ namespace TasiYokan.Audio
                 //if (m_audioPlayer.MainSource.timeSamples < m_lastSampleStamp)
 
                 // Will exceed the end after this sample
-                if(m_audioPlayer.IsBeforeEnd() == false)
+                if (m_audioPlayer.IsBeforeEnd() == false)
                 {
                     m_loopedTimes++;
-                    onEveryComplete();
+                    if (onEveryComplete != null)
+                        onEveryComplete();
 
                     if (m_loopedTimes < m_loopTimes)
                     {

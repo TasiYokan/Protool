@@ -30,6 +30,7 @@ namespace TasiYokan.Audio
         internal protected int m_loopTimes = 1;
         internal protected bool m_isForced = true;
         internal protected int m_loopedTimes = 0;
+        private Coroutine m_currentFading;
 
         public abstract bool WaitToComplete();
         protected abstract void FeedAudioPlayer();
@@ -96,6 +97,43 @@ namespace TasiYokan.Audio
             // If not loop, clear the audio track
             if (m_loopTimes >= 0)
                 m_audioPlayer.ClearAudioClip();
+        }
+
+        public void Fade(float _startVol, float _endVol, float _duration)
+        {
+            // Can only have one fading at one time
+            if (m_currentFading != null)
+                AudioManager.Instance.StopCoroutine(m_currentFading);
+
+            m_currentFading =
+                AudioManager.Instance.StartCoroutine(Fading(_startVol, _endVol, _duration));
+        }
+
+        private IEnumerator Fading(float _startVol, float _endVol, float _duration)
+        {
+            if (m_audioPlayer.MainSource.clip == null)
+            {
+                yield break;
+            }
+
+            _startVol = Mathf.Clamp01(_startVol);
+            _endVol = Mathf.Clamp01(_endVol);
+            float startTime = Time.time;
+
+            m_audioPlayer.MainSource.volume = _startVol;
+
+            while (m_audioPlayer.MainSource.clip != null
+                && Time.time < startTime + _duration)
+            {
+                float t = (Time.time - startTime) / _duration;
+                m_audioPlayer.MainSource.volume = Mathf.Lerp(_startVol, _endVol, t);
+
+                yield return null;
+            }
+
+            // Incase it has been stopped before end of fading
+            if (m_audioPlayer.MainSource.clip != null)
+                m_audioPlayer.MainSource.volume = _endVol;
         }
     }
 }

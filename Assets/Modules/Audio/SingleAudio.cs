@@ -19,27 +19,28 @@ namespace TasiYokan.Audio
 
         public SingleAudio(string _clipName, string _layerName)
             : this(_clipName, (AudioLayerType)Enum.Parse(typeof(AudioLayerType), _layerName)) { }
-        
+
         public override bool WaitToComplete()
         {
             // TODO: Move it to base class
             if (m_audioPlayer.IsPaused())
                 return true;
-            
+
             if (m_loopTimes == 1)
             {
                 return m_audioPlayer.IsClipPlaying(m_currentClip);
             }
             else if (m_loopTimes <= 0)
             {
-                if(m_audioPlayer.IsBeforeEnd())
+                if (m_audioPlayer.IsBeforeEnd())
                 {
                     return true;
                 }
                 else
                 {
-                    onEveryComplete();
-                    
+                    if (onEveryComplete != null)
+                        onEveryComplete();
+
                     return true;
                 }
             }
@@ -51,9 +52,10 @@ namespace TasiYokan.Audio
                 if (m_audioPlayer.IsBeforeEnd() == false)
                 {
                     m_loopedTimes++;
-                    onEveryComplete();
+                    if (onEveryComplete != null)
+                        onEveryComplete();
                 }
-                
+
                 if (m_loopedTimes >= m_loopTimes)
                 {
                     // We will do it after onComplete in BaseAudio
