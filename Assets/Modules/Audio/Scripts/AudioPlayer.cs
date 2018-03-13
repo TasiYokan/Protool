@@ -15,10 +15,12 @@ namespace TasiYokan.Audio
     public class AudioPlayer : MonoBehaviour
     {
         private AudioLayer m_layer;
+        [SerializeField]
         private AudioSource m_mainSource;
         /// <summary>
         /// A temp place to store extra track
         /// </summary>
+        [SerializeField]
         private AudioSource m_secondSource;
         private static int m_bufferLength;
 

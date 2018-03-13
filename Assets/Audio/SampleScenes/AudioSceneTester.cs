@@ -65,10 +65,10 @@ public class AudioSceneTester : MonoBehaviour
         StartCoroutine(TestPool());
 
         // Test Fade
-        //BaseAudio crossFadeAudio = new SingleAudio("Voice_Ringing")
-        //    .SetLoop(-1);
-        //crossFadeAudio.Play();
-        //StartCoroutine(CrossFade(crossFadeAudio));
+        BaseAudio crossFadeAudio = new SingleAudio("Voice_Ringing")
+            .SetLoop(-1);
+        crossFadeAudio.Play();
+        StartCoroutine(CrossFade(crossFadeAudio));
     }
 
     IEnumerator Pause(BaseAudio _audio)
