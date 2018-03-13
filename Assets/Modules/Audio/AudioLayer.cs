@@ -6,6 +6,7 @@ using TasiYokan.Audio;
 public class AudioLayer : MonoBehaviour
 {
     private List<AudioPlayer> m_players;
+    private const int maxPlayerInPool = 4;
     //private List<BaseAudio> m_audios;
 
     public List<AudioPlayer> Players
@@ -36,8 +37,13 @@ public class AudioLayer : MonoBehaviour
     private AudioPlayer CreateAudioPlayer()
     {
         AudioPlayer player = gameObject.AddComponent<AudioPlayer>();
-        player.Init();
+        player.Init(this);
         return player;
+    }
+
+    public void RemoveAudioPlayer(AudioPlayer _player)
+    {
+        Players.Remove(_player);
     }
 
     private AudioPlayer SearchFreeAudioPlayer()
@@ -52,7 +58,9 @@ public class AudioLayer : MonoBehaviour
             }
         }
 
-        return CreateAudioPlayer();
+        AudioPlayer newPlayer = CreateAudioPlayer();
+        Players.Add(newPlayer);
+        return newPlayer;
     }
 
     /// <summary>
@@ -63,5 +71,20 @@ public class AudioLayer : MonoBehaviour
     public AudioPlayer AddAudio(BaseAudio _audio)
     {
         return SearchFreeAudioPlayer();
+    }
+
+    public bool CheckFreeAudioPlayerEnough()
+    {
+        int totalFreeCount = 0;
+        foreach (AudioPlayer player in Players)
+        {
+            if (player.IsBusy == false)
+                totalFreeCount++;
+
+            if (totalFreeCount > maxPlayerInPool)
+                return true;
+        }
+        
+        return false;
     }
 }

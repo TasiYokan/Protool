@@ -14,6 +14,7 @@ namespace TasiYokan.Audio
     /// </summary>
     public class AudioPlayer : MonoBehaviour
     {
+        private AudioLayer m_layer;
         private AudioSource m_mainSource;
         /// <summary>
         /// A temp place to store extra track
@@ -70,10 +71,11 @@ namespace TasiYokan.Audio
             }
         }
 
-        public void Init()
+        public void Init(AudioLayer _layer)
         {
             m_mainSource = gameObject.AddComponent<AudioSource>();
             m_secondSource = gameObject.AddComponent<AudioSource>();
+            m_layer = _layer;
         }
 
         public void SetSettings(bool _isLoop)
@@ -85,6 +87,15 @@ namespace TasiYokan.Audio
         public void ClearAudioClip()
         {
             MainSource.clip = null;
+            
+            if (m_layer.CheckFreeAudioPlayerEnough())
+            {
+                print("Remove audio player");
+                m_layer.RemoveAudioPlayer(this);
+                Destroy(m_mainSource);
+                Destroy(m_secondSource);
+                Destroy(this);
+            }
         }
 
         public void SetSecondSource(AudioSource _source)
@@ -98,10 +109,7 @@ namespace TasiYokan.Audio
 
         public void ClearSecondAudioClip()
         {
-            m_secondSource.clip = null;
-
-            // TODO: When this player is free and there's 4 more free players exist on layer,
-            // remove itself.
+            m_secondSource.clip = null;                      
         }
 
         public void Play(bool _isForced)

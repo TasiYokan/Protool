@@ -62,8 +62,7 @@ public class AudioSceneTester : MonoBehaviour
         //StartCoroutine(YoyoFade(fadedAudio));
 
         // Layer pool test
-        new SingleAudio("Voice_Ringing").Play();
-        new SingleAudio("Alarm01").Play();
+        StartCoroutine(TestPool());
 
         // Test Fade
         //BaseAudio crossFadeAudio = new SingleAudio("Voice_Ringing")
@@ -102,6 +101,17 @@ public class AudioSceneTester : MonoBehaviour
         _audio.SetCrossFade();
         _audio.FeedNewAudioPlayer(AudioManager.Instance.GetAudioClip("Warning"));
         _audio.CrossFade(0, 1, 5);
+    }
+
+    IEnumerator TestPool()
+    {
+        new SingleAudio("Alarm05").Play();
+        new SingleAudio("Alarm05").Play();
+        new SingleAudio("Alarm05").Play();        
+        new SingleAudio("Alarm05").Play();
+        yield return new WaitForSeconds(0.5f);
+
+        new SingleAudio("Alarm05").Play();
     }
 
     // Update is called once per frame
