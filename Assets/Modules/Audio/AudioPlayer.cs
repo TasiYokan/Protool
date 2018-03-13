@@ -99,6 +99,9 @@ namespace TasiYokan.Audio
         public void ClearSecondAudioClip()
         {
             m_secondSource.clip = null;
+
+            // TODO: When this player is free and there's 4 more free players exist on layer,
+            // remove itself.
         }
 
         public void Play(bool _isForced)

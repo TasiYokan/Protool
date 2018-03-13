@@ -44,6 +44,8 @@ namespace TasiYokan.Audio
         
         private List<AudioLayer> m_inbuiltLayers;
         private List<AudioLayer> m_runtimeLayers;
+        // HACK: Store all audio that has no specific requirement
+        private AudioLayer m_tempLayer;
 
         public static AudioManager Instance
         {
@@ -143,6 +145,8 @@ namespace TasiYokan.Audio
             InitInbuiltLayer(AudioLayerType.Bgm);
             // Dialogue
             InitInbuiltLayer(AudioLayerType.Dialogue);
+            // Undefined
+            m_tempLayer = InitInbuiltLayer(AudioLayerType.Undefined);
         }
 
         /// <summary>
@@ -245,7 +249,7 @@ namespace TasiYokan.Audio
         {
             if (_layerType == AudioLayerType.Undefined)
             {
-                return InitRuntimeLayer();
+                return m_tempLayer;
             }
             else
             {

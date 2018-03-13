@@ -42,7 +42,7 @@ public class AudioManager_Test : IPrebuildSetup, IPostBuildCleanup
         Assert.IsNotNull(mgr);
 
         Assert.AreEqual(8, mgr.AllAudioNames.Count);
-        Assert.AreEqual(2, mgr.InbuiltLayers.Count);
+        Assert.AreEqual(3, mgr.InbuiltLayers.Count);
     }
 
     [Test]
@@ -65,6 +65,7 @@ public class AudioManager_Test : IPrebuildSetup, IPostBuildCleanup
     }
 
     [Test]
+    [Ignore("undefined sounds will be played on an 'undefined' inbuilt layer")]
     public void GetLayer_Undefined_SpawnNew()
     {
         Assert.AreEqual(0, AudioManager.Instance.RuntimeLayers.Count);
@@ -76,6 +77,7 @@ public class AudioManager_Test : IPrebuildSetup, IPostBuildCleanup
     }
 
     [Test]
+    [Ignore("undefined sounds will be played on an 'undefined' inbuilt layer")]
     public void GetLayer_Undefined_GetExisting()
     {
         AudioLayer layer = AudioManager.Instance.GetLayer();
@@ -89,6 +91,7 @@ public class AudioManager_Test : IPrebuildSetup, IPostBuildCleanup
     }
 
     [Test]
+    [Ignore("undefined sounds will be played on an 'undefined' inbuilt layer")]
     public void GetLayer_Undefined_GetExistingPlaying_Fail()
     {
         new SingleAudio("Warning").Play();
