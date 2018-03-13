@@ -1,0 +1,8 @@
+{
+    "name": "Audio.Editor",
+    "references": [
+        "Audio"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": []
+}
