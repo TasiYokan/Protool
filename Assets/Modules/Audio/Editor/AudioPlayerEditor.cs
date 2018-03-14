@@ -59,14 +59,14 @@ namespace TasiYokan.Audio
         // Update is called once per frame
         void Update()
         {
-            //Debug.Log("Self update");
+            this.Repaint();
         }
 
         public override void OnInspectorGUI()
         {
             m_serializedTarget.Update();
             GUILayout.Space(5);
-            GUILayout.Box("Test Text", GUILayout.Width(Screen.width - 20), GUILayout.Height(20));
+            //GUILayout.Box("Test Text", GUILayout.Width(Screen.width - 20), GUILayout.Height(20));
             DrawBasicSettings();
             GUILayout.Space(5);
             m_serializedTarget.ApplyModifiedProperties();
@@ -78,18 +78,47 @@ namespace TasiYokan.Audio
 
         void DrawBasicSettings()
         {
-            GUILayout.BeginHorizontal();
+            GUILayout.BeginVertical();
             if (m_mainSource.objectReferenceValue != null)
             {
-                EditorGUILayout.ObjectField(
-                    ((AudioSource)m_mainSource.objectReferenceValue).clip, 
-                    typeof(AudioClip));
-                EditorGUILayout.ObjectField(
-                    ((AudioSource)m_secondSource.objectReferenceValue).clip,
-                    typeof(AudioClip));
+                AudioSource mainSource = ((AudioSource)m_mainSource.objectReferenceValue);
+                //EditorGUILayout.ObjectField(mainSource.clip, typeof(AudioClip));
+                if (mainSource.clip)
+                {
+                    ProgressBar(mainSource.time / mainSource.clip.length, mainSource.clip.name);
+
+                    GUILayout.BeginHorizontal();
+                    EditorStyles.helpBox.fixedWidth = 50;
+                    GUILayout.Label("Volume:", EditorStyles.helpBox);
+                    GUILayout.HorizontalSlider(mainSource.volume, 0, 1);
+                    GUILayout.EndHorizontal();
+                }
+                
+                GUILayout.Space(10);
+
+                AudioSource secondSource = ((AudioSource)m_secondSource.objectReferenceValue);
+                //EditorGUILayout.ObjectField(secondSource.clip, typeof(AudioClip));
+                if (secondSource.clip)
+                {
+                    ProgressBar(secondSource.time / secondSource.clip.length, secondSource.clip.name);
+
+                    GUILayout.BeginHorizontal();
+                    EditorStyles.helpBox.fixedWidth = 50;
+                    GUILayout.Label("Volume:", EditorStyles.helpBox);
+                    GUILayout.HorizontalSlider(secondSource.volume, 0, 1);
+                    GUILayout.EndHorizontal();
+                }
                 GUI.enabled = true;
             }
-            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+        }
+
+        void ProgressBar(float value, string label)
+        {
+            // Get a rect for the progress bar using the same margins as a textfield:
+            Rect rect = GUILayoutUtility.GetRect(18, 18, "TextField");
+            EditorGUI.ProgressBar(rect, value, label);
+            EditorGUILayout.Space();
         }
     }
 }
