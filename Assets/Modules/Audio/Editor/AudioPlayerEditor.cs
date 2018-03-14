@@ -59,7 +59,9 @@ namespace TasiYokan.Audio
         // Update is called once per frame
         void Update()
         {
-            this.Repaint();
+            // Only update when in play mode
+            //if (EditorApplication.isPlaying)
+                this.Repaint();
         }
 
         public override void OnInspectorGUI()
@@ -81,6 +83,9 @@ namespace TasiYokan.Audio
             GUILayout.BeginVertical();
             if (m_mainSource.objectReferenceValue != null)
             {
+                GUIStyle style = new GUIStyle(EditorStyles.helpBox);
+                style.fixedWidth = 90;
+
                 AudioSource mainSource = ((AudioSource)m_mainSource.objectReferenceValue);
                 //EditorGUILayout.ObjectField(mainSource.clip, typeof(AudioClip));
                 if (mainSource.clip)
@@ -88,12 +93,11 @@ namespace TasiYokan.Audio
                     ProgressBar(mainSource.time / mainSource.clip.length, mainSource.clip.name);
 
                     GUILayout.BeginHorizontal();
-                    EditorStyles.helpBox.fixedWidth = 50;
-                    GUILayout.Label("Volume:", EditorStyles.helpBox);
+                    GUILayout.Label(string.Format("Volume: {0: 00%}", mainSource.volume), style);
                     GUILayout.HorizontalSlider(mainSource.volume, 0, 1);
                     GUILayout.EndHorizontal();
                 }
-                
+
                 GUILayout.Space(10);
 
                 AudioSource secondSource = ((AudioSource)m_secondSource.objectReferenceValue);
@@ -103,8 +107,7 @@ namespace TasiYokan.Audio
                     ProgressBar(secondSource.time / secondSource.clip.length, secondSource.clip.name);
 
                     GUILayout.BeginHorizontal();
-                    EditorStyles.helpBox.fixedWidth = 50;
-                    GUILayout.Label("Volume:", EditorStyles.helpBox);
+                    GUILayout.Label(string.Format("Volume: {0: 00%}", secondSource.volume), style);
                     GUILayout.HorizontalSlider(secondSource.volume, 0, 1);
                     GUILayout.EndHorizontal();
                 }
@@ -117,7 +120,8 @@ namespace TasiYokan.Audio
         {
             // Get a rect for the progress bar using the same margins as a textfield:
             Rect rect = GUILayoutUtility.GetRect(18, 18, "TextField");
-            EditorGUI.ProgressBar(rect, value, label);
+            EditorGUI.ProgressBar(rect, value, 
+                string.Format("{0}: {1: 00%}",label, value));
             EditorGUILayout.Space();
         }
     }
