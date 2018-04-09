@@ -63,6 +63,13 @@ namespace TasiYokan.Audio
             return _container;
         }
 
+        /// <summary>
+        /// TODO: This one is different from what it does directly on AudioPlayer, which will not update volume in BasicAudio
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_container"></param>
+        /// <param name="_volume"></param>
+        /// <returns></returns>
         public static T SetVolume<T>(this T _container, float _volume) where T : BaseAudio
         {
             _container.m_volume = _volume;

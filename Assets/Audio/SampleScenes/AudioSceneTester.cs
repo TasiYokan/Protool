@@ -70,14 +70,17 @@ public class AudioSceneTester : MonoBehaviour
         //crossFadeAudio.Play();
         //StartCoroutine(CrossFade(crossFadeAudio));
 
-        new SingleAudio("Voice_Ringing").SetVolume(0.92f)
-            .SetLoop(-1)
-            .Play();
+        SingleAudio audio = new SingleAudio("Voice_Ringing").SetVolume(0.92f)
+            .SetLoop(-1);
+
+        audio.Play();
         //.Fade(1, 0, 3);
 
         AudioManager.Instance.GetLayer(AudioLayerType.Undefined).SerachPlayerWith("Voice_Ringing").SetVolume(0.33f);
         AudioManager.Instance.SearchPlayerAt("Voice_Ringing", AudioLayerType.Undefined).SetVolume(0.34f);
         AudioManager.Instance.SearchPlayer("Voice_Ringing").SetVolume(0.35f);
+        audio.SetVolume(0.36f);
+        print("Audio volume " + audio.Volume);
     }
 
     IEnumerator Pause(BaseAudio _audio)
@@ -92,7 +95,7 @@ public class AudioSceneTester : MonoBehaviour
 
     IEnumerator YoyoFade(BaseAudio _audio)
     {
-         _audio.Fade(0, 1, 3);
+        _audio.Fade(0, 1, 3);
 
         yield return new WaitForSeconds(3);
 
@@ -116,7 +119,7 @@ public class AudioSceneTester : MonoBehaviour
     {
         new SingleAudio("Alarm05").Play();
         new SingleAudio("Alarm05").Play();
-        new SingleAudio("Alarm05").Play();        
+        new SingleAudio("Alarm05").Play();
         new SingleAudio("Alarm05").Play();
         yield return new WaitForSeconds(0.5f);
 

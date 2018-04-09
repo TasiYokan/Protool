@@ -41,6 +41,14 @@ namespace TasiYokan.Audio
             }
         }
 
+        public float Volume
+        {
+            get
+            {
+                return m_volume;
+            }
+        }
+
         public abstract bool WaitToComplete();
         protected abstract void FeedAudioPlayer();
         // TODO: Not tidy!
