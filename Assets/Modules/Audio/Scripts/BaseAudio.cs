@@ -143,20 +143,20 @@ namespace TasiYokan.Audio
             _endVol = Mathf.Clamp01(_endVol);
             float startTime = Time.time;
 
-            m_audioPlayer.MainSource.volume = _startVol;
+            m_audioPlayer.SetVolume(_startVol);
 
             while (m_audioPlayer.MainSource.clip != null
                 && Time.time < startTime + _duration)
             {
                 float t = (Time.time - startTime) / _duration;
-                m_audioPlayer.MainSource.volume = Mathf.Lerp(_startVol, _endVol, t);
+                m_audioPlayer.SetVolume(Mathf.Lerp(_startVol, _endVol, t));
 
                 yield return null;
             }
 
             // Incase it has been stopped before end of fading
             if (m_audioPlayer.MainSource.clip != null)
-                m_audioPlayer.MainSource.volume = _endVol;
+                m_audioPlayer.SetVolume(_endVol);
         }
 
         public void CrossFade(float _startVol, float _endVol, float _duration)
@@ -186,15 +186,15 @@ namespace TasiYokan.Audio
             _endVol = Mathf.Clamp01(_endVol);
             float startTime = Time.time;
 
-            m_audioPlayer.MainSource.volume = _startVol;
-            m_audioPlayer.SecondSource.volume = 1 - m_audioPlayer.MainSource.volume;
+            m_audioPlayer.SetVolume(_startVol);
+            m_audioPlayer.SetVolume(1 - m_audioPlayer.GetVolume(), 1);
 
             while (m_audioPlayer.MainSource.clip != null
                 && Time.time < startTime + _duration)
             {
                 float t = (Time.time - startTime) / _duration;
-                m_audioPlayer.MainSource.volume = Mathf.Lerp(_startVol, _endVol, t);
-                m_audioPlayer.SecondSource.volume = 1 - m_audioPlayer.MainSource.volume;
+                m_audioPlayer.SetVolume(Mathf.Lerp(_startVol, _endVol, t));
+                m_audioPlayer.SetVolume(1 - m_audioPlayer.GetVolume(), 0);
 
                yield return null;
             }
@@ -202,8 +202,8 @@ namespace TasiYokan.Audio
             // Incase it has been stopped before end of fading
             if (m_audioPlayer.MainSource.clip != null)
             {
-                m_audioPlayer.MainSource.volume = _endVol;
-                m_audioPlayer.SecondSource.volume = 1 - m_audioPlayer.MainSource.volume;
+                m_audioPlayer.SetVolume(_endVol);
+                m_audioPlayer.SetVolume(1 - m_audioPlayer.GetVolume(), 1);
             }
 
             m_audioPlayer.ClearSecondAudioClip();

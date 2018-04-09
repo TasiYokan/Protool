@@ -66,7 +66,7 @@ namespace TasiYokan.Audio
         public static T SetVolume<T>(this T _container, float _volume) where T : BaseAudio
         {
             _container.m_volume = _volume;
-            _container.AudioPlayer.MainSource.volume = _volume;
+            _container.AudioPlayer.SetVolume(_volume);
             return _container;
         }
 

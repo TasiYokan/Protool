@@ -65,6 +65,20 @@ namespace TasiYokan.Audio
             return newPlayer;
         }
 
+        public AudioPlayer SerachPlayerWith(string _clipName)
+        {
+            foreach (AudioPlayer player in Players)
+            {
+                if(player.MainSource.clip != null
+                    && player.MainSource.clip.name == _clipName)
+                {
+                    return player;
+                }
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Return the audioplayer to play what <see cref="BaseAudio"/> wants to play
         /// </summary>

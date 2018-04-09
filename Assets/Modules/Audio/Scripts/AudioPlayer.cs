@@ -166,6 +166,22 @@ namespace TasiYokan.Audio
             m_mainSource.UnPause();
         }
 
+        public void SetVolume(float _volume, int _sourceId = 0)
+        {
+            if (_sourceId == 0)
+                m_mainSource.volume = _volume;
+            else
+                m_secondSource.volume = _volume;
+        }
+
+        public float GetVolume(int _sourceId = 0)
+        {
+            if (_sourceId == 0)
+                return m_mainSource.volume;
+            else
+                return m_secondSource.volume;
+        }
+
         public bool IsPaused()
         {
             return IsPlaying == false && !IsAtEnd();

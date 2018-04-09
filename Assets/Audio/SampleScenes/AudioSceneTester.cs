@@ -70,9 +70,14 @@ public class AudioSceneTester : MonoBehaviour
         //crossFadeAudio.Play();
         //StartCoroutine(CrossFade(crossFadeAudio));
 
-        new SingleAudio("Voice_Ringing").SetVolume(0.12f)
+        new SingleAudio("Voice_Ringing").SetVolume(0.92f)
             .SetLoop(-1)
-            .Fade(1, 0, 3);
+            .Play();
+        //.Fade(1, 0, 3);
+
+        AudioManager.Instance.GetLayer(AudioLayerType.Undefined).SerachPlayerWith("Voice_Ringing").SetVolume(0.33f);
+        AudioManager.Instance.SearchPlayerAt("Voice_Ringing", AudioLayerType.Undefined).SetVolume(0.34f);
+        AudioManager.Instance.SearchPlayer("Voice_Ringing").SetVolume(0.35f);
     }
 
     IEnumerator Pause(BaseAudio _audio)

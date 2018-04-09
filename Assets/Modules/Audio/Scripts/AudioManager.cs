@@ -269,5 +269,36 @@ namespace TasiYokan.Audio
                 return RuntimeLayers[(int)_layerType];
             }
         }
+
+        public AudioPlayer SearchPlayerAt(string _clipName, AudioLayerType _layerType)
+        {
+            return GetLayer(_layerType).SerachPlayerWith(_clipName);
+        }
+
+        /// <summary>
+        /// Search AudioPlayer among all layers
+        /// </summary>
+        /// <param name="_clipName"></param>
+        /// <returns></returns>
+        public AudioPlayer SearchPlayer(string _clipName)
+        {
+            foreach (AudioLayer layer in InbuiltLayers)
+            {
+                AudioPlayer foundPlayer = layer.SerachPlayerWith(_clipName);
+                if (foundPlayer != null)
+                {
+                    return foundPlayer;
+                }
+            }
+            foreach (AudioLayer layer in RuntimeLayers)
+            {
+                AudioPlayer foundPlayer = layer.SerachPlayerWith(_clipName);
+                if (foundPlayer != null)
+                {
+                    return foundPlayer;
+                }
+            }
+            return null;
+        }
     }
 }
