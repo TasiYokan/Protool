@@ -61,14 +61,18 @@ public class AudioSceneTester : MonoBehaviour
         ////fadedAudio.Fade(0, 1, 5);
         //StartCoroutine(YoyoFade(fadedAudio));
 
-        // Layer pool test
-        StartCoroutine(TestPool());
+        //// Layer pool test
+        //StartCoroutine(TestPool());
 
-        // Test Fade
-        BaseAudio crossFadeAudio = new SingleAudio("Voice_Ringing")
-            .SetLoop(-1);
-        crossFadeAudio.Play();
-        StartCoroutine(CrossFade(crossFadeAudio));
+        //// Test Fade
+        //BaseAudio crossFadeAudio = new SingleAudio("Voice_Ringing")
+        //    .SetLoop(-1);
+        //crossFadeAudio.Play();
+        //StartCoroutine(CrossFade(crossFadeAudio));
+
+        new SingleAudio("Voice_Ringing").SetVolume(0.12f)
+            .SetLoop(-1)
+            .Play();
     }
 
     IEnumerator Pause(BaseAudio _audio)

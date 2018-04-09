@@ -30,6 +30,7 @@ namespace TasiYokan.Audio
         protected internal int m_loopTimes = 1;
         protected internal bool m_isForced = true;
         protected internal int m_loopedTimes = 0;
+        protected internal float m_volume = 1;
         private Coroutine m_currentFading;
 
         public AudioPlayer AudioPlayer

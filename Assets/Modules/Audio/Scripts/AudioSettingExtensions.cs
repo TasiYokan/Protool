@@ -63,6 +63,13 @@ namespace TasiYokan.Audio
             return _container;
         }
 
+        public static T SetVolume<T>(this T _container, float _volume) where T : BaseAudio
+        {
+            _container.m_volume = _volume;
+            _container.AudioPlayer.MainSource.volume = _volume;
+            return _container;
+        }
+
         /// <summary>
         /// Store current audioSource to <see cref="AudioPlayer.SecondSource"/>
         /// </summary>
