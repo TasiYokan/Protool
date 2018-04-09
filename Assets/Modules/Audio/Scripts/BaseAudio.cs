@@ -130,8 +130,14 @@ namespace TasiYokan.Audio
         {
             if (m_audioPlayer.MainSource.clip == null)
             {
-                yield break;
+                Play();
+                //yield break;
             }
+
+            //if (m_audioPlayer.IsPlaying == false)
+            //{
+            //    m_audioPlayer.Play(m_isForced);
+            //}
 
             _startVol = Mathf.Clamp01(_startVol);
             _endVol = Mathf.Clamp01(_endVol);
@@ -167,8 +173,14 @@ namespace TasiYokan.Audio
         {
             if (m_audioPlayer.MainSource.clip == null)
             {
-                yield break;
+                Play();
+                //yield break;
             }
+
+            //if(m_audioPlayer.IsPlaying == false)
+            //{
+            //    m_audioPlayer.Play(m_isForced);
+            //}
 
             _startVol = Mathf.Clamp01(_startVol);
             _endVol = Mathf.Clamp01(_endVol);

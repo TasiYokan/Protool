@@ -72,7 +72,7 @@ public class AudioSceneTester : MonoBehaviour
 
         new SingleAudio("Voice_Ringing").SetVolume(0.12f)
             .SetLoop(-1)
-            .Play();
+            .Fade(1, 0, 3);
     }
 
     IEnumerator Pause(BaseAudio _audio)

@@ -57,6 +57,14 @@ namespace TasiYokan.Audio
             }
         }
 
+        public bool IsPlaying
+        {
+            get
+            {
+                return MainSource.isPlaying;
+            }
+        }
+
         public static int BufferLength
         {
             get
@@ -116,7 +124,7 @@ namespace TasiYokan.Audio
 
         public void Play(bool _isForced)
         {
-            if (m_mainSource.isPlaying && _isForced == false)
+            if (IsPlaying && _isForced == false)
             {
                 Debug.Log("Already one in play, skip it");
                 return;
@@ -129,7 +137,7 @@ namespace TasiYokan.Audio
 
         public void PlayDelayed(float _delay, bool _isForced)
         {
-            if (m_mainSource.isPlaying && _isForced == false)
+            if (IsPlaying && _isForced == false)
             {
                 Debug.Log("Already one in play, skip it");
                 return;
@@ -160,12 +168,12 @@ namespace TasiYokan.Audio
 
         public bool IsPaused()
         {
-            return m_mainSource.isPlaying == false && !IsAtEnd();
+            return IsPlaying == false && !IsAtEnd();
         }
 
         public bool IsClipPlaying(AudioClip _clip)
         {
-            return m_mainSource.clip == _clip && m_mainSource.isPlaying; // FIXME: Pause will also be considered as not isPlaying
+            return m_mainSource.clip == _clip && IsPlaying; // FIXME: Pause will also be considered as not isPlaying
         }
 
         public bool IsBeforeEnd()
@@ -184,7 +192,7 @@ namespace TasiYokan.Audio
 
         public bool IsOtherSoundPlaying(AudioClip _clip)
         {
-            return m_mainSource.isPlaying && m_mainSource.clip != _clip;
+            return IsPlaying && m_mainSource.clip != _clip;
         }
     }
 }
