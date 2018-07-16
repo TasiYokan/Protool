@@ -1,0 +1,10 @@
+{
+    "name": "Algorithm",
+    "references": [
+        "Utilities"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
