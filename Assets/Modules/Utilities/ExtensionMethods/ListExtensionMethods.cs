@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public static class ListExtensionMethods
 {
@@ -14,5 +15,18 @@ public static class ListExtensionMethods
             list[k] = list[i];
             list[i] = temp;
         }
+    }
+
+    /// <summary>
+    /// Try Deep copy. However, it does not guarantee a deep copy, and the .MemberwiseClone() method create a shallow copy of internal members.
+    /// <seealso cref="https://msdn.microsoft.com/en-us/library/system.object.memberwiseclone.aspx"/>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="_srcCollection"></param>
+    /// <returns></returns>
+    public static List<T> Clone<T>(this List<T> _srcCollection) where T : ICloneable
+    {
+        // Return a new list
+        return _srcCollection.Select(item => (T)item.Clone()).ToList();
     }
 }
