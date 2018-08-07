@@ -80,28 +80,28 @@ namespace TasiYokan.Algorithm.Graph
 
         #region Tree Diameter
 
-        public static List<UndirectedEdge> GetTreeDiameter(List<UndirectedEdge> _edges, out int _startId, out int _endId)
+        private static KeyValuePair<float, List<int>>[] SearchDeepest(int _startId)
         {
-            m_treeAdjMap = ConvertUndirectedEdgesToAdjacencyMap(_edges);
-
-            return GetTreeDiameter(m_treeAdjMap, out _startId, out _endId);
-        }
-
-        public static List<UndirectedEdge> GetTreeDiameter(
-            Dictionary<int, List<DstEdge>> _treeAdjMap, out int _startId, out int _endId)
-        {
-            m_treeAdjMap = _treeAdjMap;
-            List<UndirectedEdge> trunkEdges = new List<UndirectedEdge>();
-
-            m_vis = new bool[m_treeAdjMap.Keys.Count];
-
             /// <summary>
             /// Key is the max distance from deepest leaf node to current index node. 
-            /// Values stores the path from leaf node to current node.[inclusive]
+            /// Values stores ids of the path from leaf node to current node.[inclusive]
             /// </summary>
             KeyValuePair<float, List<int>>[] nodeDepthInfo =
                 new KeyValuePair<float, List<int>>[m_treeAdjMap.Keys.Count];
             Action<int> DfsDeepest = null;
+
+            Action ResetMap = new Action(() =>
+            {
+                // nodeMaxDistInfo should cover all vertex in map so that we can use id of array to know which vertex it is
+                nodeDepthInfo = new KeyValuePair<float, List<int>>[m_treeAdjMap.Keys.Count];
+                m_vis = new bool[m_treeAdjMap.Keys.Count];
+                for (int i = 0; i < m_treeAdjMap.Keys.Count; ++i)
+                {
+                    nodeDepthInfo[i] = new KeyValuePair<float, List<int>>(
+                        Mathf.NegativeInfinity, null);
+                    m_vis[i] = false;
+                }
+            });
 
             DfsDeepest = new Action<int>((_curId) =>
             {
@@ -147,32 +147,45 @@ namespace TasiYokan.Algorithm.Graph
                 return;
             });
 
-            Action ResetMap = new Action(() =>
-            {
-                // nodeMaxDistInfo should cover all vertex in map so that we can use id of array to know which vertex it is
-                nodeDepthInfo = new KeyValuePair<float, List<int>>[m_treeAdjMap.Keys.Count];
-                m_vis = new bool[m_treeAdjMap.Keys.Count];
-                for (int i = 0; i < m_treeAdjMap.Keys.Count; ++i)
-                {
-                    nodeDepthInfo[i] = new KeyValuePair<float, List<int>>(
-                        Mathf.NegativeInfinity, null);
-                    m_vis[i] = false;
-                }
-            });
-
             ResetMap();
-            DfsDeepest(m_treeAdjMap.Keys.First());
+            DfsDeepest(_startId);
 
-            _endId = nodeDepthInfo[m_treeAdjMap.Keys.First()].Value[0];
-            ResetMap();
-            DfsDeepest(_endId);
+            return nodeDepthInfo;
+        }
 
+        public static List<UndirectedEdge> GetTreeDiameter(List<UndirectedEdge> _edges, out int _startId, out int _endId)
+        {
+            m_treeAdjMap = ConvertUndirectedEdgesToAdjacencyMap(_edges);
+
+            return GetTreeDiameter(m_treeAdjMap, out _startId, out _endId);
+        }
+
+        public static List<UndirectedEdge> GetTreeDiameter(
+            Dictionary<int, List<DstEdge>> _treeAdjMap, out int _startId, out int _endId)
+        {
+            m_treeAdjMap = _treeAdjMap;
+            List<UndirectedEdge> trunkEdges = new List<UndirectedEdge>();
+
+            m_vis = new bool[m_treeAdjMap.Keys.Count];
+
+            /// <summary>
+            /// Key is the max distance from deepest leaf node to current index node. 
+            /// Values stores ids of the path from leaf node to current node.[inclusive]
+            /// </summary>
+            KeyValuePair<float, List<int>>[] nodeDepthInfo =
+                new KeyValuePair<float, List<int>>[m_treeAdjMap.Keys.Count];
+            
+            _endId = SearchDeepest(m_treeAdjMap.Keys.First())[m_treeAdjMap.Keys.First()].Value[0];
+            nodeDepthInfo = SearchDeepest(_endId);
+
+            // This time _endId is the root while _startId is the deepest leaf node
             _startId = nodeDepthInfo[_endId].Value[0];
 
+            // Connect path from _startId to _endId
             List<int> finalNodeList = nodeDepthInfo[_endId].Value;
             for (int i = 0; i < finalNodeList.Count - 1; ++i)
             {
-                trunkEdges.Add(new UndirectedEdge(finalNodeList[i], finalNodeList[i + 1], 0));
+                trunkEdges.Add(new UndirectedEdge(finalNodeList[i], finalNodeList[i + 1]));
             }
 
             // Remember to clear static variable before return
@@ -180,6 +193,38 @@ namespace TasiYokan.Algorithm.Graph
             m_vis = null;
 
             return trunkEdges;
+        }
+
+        public static List<UndirectedEdge> GetTreeLongestPath(
+            Dictionary<int, List<DstEdge>> _treeAdjMap, int _startId, out int _endId)
+        {
+            m_treeAdjMap = _treeAdjMap;
+            List<UndirectedEdge> longestPath = new List<UndirectedEdge>();
+
+            m_vis = new bool[m_treeAdjMap.Keys.Count];
+
+            /// <summary>
+            /// Key is the max distance from deepest leaf node to current index node. 
+            /// Values stores ids of the path from leaf node to current node.[inclusive]
+            /// </summary>
+            KeyValuePair<float, List<int>>[] nodeDepthInfo =
+                new KeyValuePair<float, List<int>>[m_treeAdjMap.Keys.Count];
+
+            nodeDepthInfo = SearchDeepest(_startId);
+            _endId = nodeDepthInfo[_startId].Value[0];
+
+            // Connect path from _startId to _endId
+            List<int> finalNodeList = nodeDepthInfo[_startId].Value;
+            for (int i = finalNodeList.Count - 1; i >= 1; --i)
+            {
+                longestPath.Add(new UndirectedEdge(finalNodeList[i], finalNodeList[i - 1]));
+            }
+
+            // Remember to clear static variable before return
+            m_treeAdjMap = null;
+            m_vis = null;
+
+            return longestPath;
         }
 
         #endregion
