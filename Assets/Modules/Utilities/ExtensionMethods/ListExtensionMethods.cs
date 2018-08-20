@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public static class ListExtensionMethods
+public static class CollectionExtensionMethods
 {
     private static Random rand = new Random();
 
@@ -28,5 +28,11 @@ public static class ListExtensionMethods
     {
         // Return a new list
         return _srcCollection.Select(item => (T)item.Clone()).ToList();
+    }
+
+    public static bool OptimalContainsKey<TKey, TValue>(this Dictionary<TKey, TValue> _dict, TKey _key)
+    {
+        TValue value;
+        return _dict.TryGetValue(_key, out value);
     }
 }

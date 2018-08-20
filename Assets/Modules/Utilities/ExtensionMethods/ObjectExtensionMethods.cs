@@ -13,6 +13,18 @@ public static class ObjectExtensionMethods
 	{
 		return Object.FindObjectsOfType (typeof(T)).Cast<T> ().ToArray ();
 	}
+
+    /// <summary>
+    /// To select the right destroy method between Editor mode and Game mode
+    /// </summary>
+    /// <param name="_obj"></param>
+    public static void OptimalDestroy(this Object _obj)
+    {
+        if (Application.isPlaying)
+            Object.Destroy(_obj);
+        else
+            Object.DestroyImmediate(_obj);
+    }
 }
 
 public static class DebugLogExtensionMethods
