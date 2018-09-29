@@ -46,6 +46,11 @@ public static class VectorExtensionMethods
         return new Vector3(_vec3.x, _vec3.y,  _z);
     }
 
+    public static Vector3 Reciprocal(this Vector3 _vec)
+    {
+        return new Vector3(1f / _vec.x, 1f / _vec.y, 1f / _vec.z);
+    }
+
     public static Vector3 Format(this Vector3 _vec3, int _digits)
     {
         return new Vector3((float)System.Math.Round(_vec3.x, _digits),
