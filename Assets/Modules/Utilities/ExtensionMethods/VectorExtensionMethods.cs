@@ -2,11 +2,16 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public static class VectorExtensionMethods
+public static class Vector3ExtensionMethods
 {
     public static Vector3 AddXYZ(this Vector3 _vec3, float _x = 0, float _y = 0, float _z = 0)
     {
         return new Vector3(_vec3.x + _x, _vec3.y + _y, _vec3.z + _z);
+    }
+
+    public static Vector3 AddXY(this Vector3 _vec3, float _x = 0, float _y = 0)
+    {
+        return new Vector3(_vec3.x + _x, _vec3.y + _y, _vec3.z);
     }
 
     public static Vector3 AddX(this Vector3 _vec3, float _dx)
@@ -23,12 +28,6 @@ public static class VectorExtensionMethods
     {
         return new Vector3(_vec3.x, _vec3.y, _vec3.z + _dz);
     }
-
-    public static Vector2 AddXY(this Vector2 _vec2, float _x = 0, float _y = 0)
-    {
-        return new Vector2(_vec2.x + _x, _vec2.y + _y);
-    }
-
 
 
     public static Vector3 SetX(this Vector3 _vec3, float _x)
@@ -59,154 +58,112 @@ public static class VectorExtensionMethods
     }
 }
 
-public static class Vector2IntExtensionMethods
+public static class Vector2ExtensionMethods
 {
-    public static bool Equal(this Vector2Int _lhs, Vector2Int _rhs)
+    public static Vector2 AddXY(this Vector2 _vec2, int _x = 0, int _y = 0)
+    {
+        return new Vector2(_vec2.x + _x, _vec2.y + _y);
+    }
+
+    public static Vector2 AddX(this Vector2 _vec2, int _dx)
+    {
+        return new Vector2(_vec2.x + _dx, _vec2.y);
+    }
+
+    public static Vector2 AddY(this Vector2 _vec2, int _dy)
+    {
+        return new Vector2(_vec2.x, _vec2.y + _dy);
+    }
+
+
+    public static Vector2 SetX(this Vector2 _vec2, int _x)
+    {
+        return new Vector2(_x, _vec2.y);
+    }
+
+    public static Vector2 SetY(this Vector2 _vec2, int _y)
+    {
+        return new Vector2(_vec2.x, _y);
+    }
+
+    public static bool Equals(this Vector2 _lhs, Vector2 _rhs)
     {
         return _lhs.x == _rhs.x && _lhs.y == _rhs.y;
     }
 
-    public static bool Greater(this Vector2Int _lhs, Vector2Int _rhs)
+    public static bool Greater(this Vector2 _lhs, Vector2 _rhs)
     {
         return _lhs.x > _rhs.x && _lhs.y > _rhs.y;
     }
 
-    public static bool Less(this Vector2Int _lhs, Vector2Int _rhs)
+    public static bool Less(this Vector2 _lhs, Vector2 _rhs)
     {
         return _lhs.x < _rhs.x && _lhs.y < _rhs.y;
     }
 
-    public static bool EqualGreater(this Vector2Int _lhs, Vector2Int _rhs)
+    public static bool EqualGreater(this Vector2 _lhs, Vector2 _rhs)
     {
         return _lhs.x >= _rhs.x && _lhs.y >= _rhs.y;
     }
 
-    public static bool EqualLess(this Vector2Int _lhs, Vector2Int _rhs)
+    public static bool EqualLess(this Vector2 _lhs, Vector2 _rhs)
     {
         return _lhs.x <= _rhs.x && _lhs.y <= _rhs.y;
     }
 
-    public static bool AnyGreater(this Vector2Int _lhs, Vector2Int _rhs)
+    public static bool AnyGreater(this Vector2 _lhs, Vector2 _rhs)
     {
         return _lhs.x > _rhs.x || _lhs.y > _rhs.y;
     }
 
-    public static bool AnyLess(this Vector2Int _lhs, Vector2Int _rhs)
+    public static bool AnyLess(this Vector2 _lhs, Vector2 _rhs)
     {
         return _lhs.x < _rhs.x || _lhs.y < _rhs.y;
     }
 
-    public static bool AnyEqualGreater(this Vector2Int _lhs, Vector2Int _rhs)
+    public static bool AnyEqualGreater(this Vector2 _lhs, Vector2 _rhs)
     {
         return _lhs.x >= _rhs.x || _lhs.y >= _rhs.y;
     }
 
-    public static bool AnyEqualLess(this Vector2Int _lhs, Vector2Int _rhs)
+    public static bool AnyEqualLess(this Vector2 _lhs, Vector2 _rhs)
     {
         return _lhs.x <= _rhs.x || _lhs.y <= _rhs.y;
     }
 
-    public static int Dot(this Vector2Int _lhs, Vector2Int _rhs)
+    public static float Dot(this Vector2 _lhs, Vector2 _rhs)
     {
         return _lhs.x * _rhs.x + _lhs.y * _rhs.y;
     }
 
-    public static int Cross(this Vector2Int _lhs, Vector2Int _rhs)
+    public static float Cross(this Vector2 _lhs, Vector2 _rhs)
     {
         return _lhs.x * _rhs.y - _lhs.y * _rhs.x;
     }
 
-    /// <summary>
-    /// Returns 8 directinos in plane.
-    /// </summary>
-    /// <returns></returns>
-    public static Vector2Int GetNormalized2D(this Vector2Int _vec)
+    
+    public static Vector2 Scale(this Vector2 _vec2, float _scale)
     {
-        if (_vec.x == 0 && _vec.y == 0)
-        {
-            return new Vector2Int(0, 0);
-        }
-        //vertical
-        else if (_vec.x == 0)
-        {
-            return new Vector2Int(0, _vec.y / Mathf.Abs(_vec.y));
-        }
-        //horizontal
-        else if (_vec.y == 0)
-        {
-            return new Vector2Int(_vec.x / Mathf.Abs(_vec.x), 0);
-        }
-        //diagonal
-        else
-        {
-            return new Vector2Int(_vec.x / Mathf.Abs(_vec.x), _vec.y / Mathf.Abs(_vec.y));
-        }
+        return new Vector2(_vec2.x * _scale, _vec2.y * _scale);
     }
 
-    /// <summary>
-    /// Returns 4 directions
-    /// </summary>
-    /// <param name="_vec"></param>
-    /// <returns></returns>
-    public static Vector2Int GetNormalizedSimple2D(this Vector2Int _vec)
+    public static Vector2 ScaleX(this Vector2 _vec2, float _factor)
     {
-        if (_vec.x == 0 && _vec.y == 0)
-        {
-            return new Vector2Int(0, 0);
-        }
-        //vertical
-        else if (_vec.x == 0)
-        {
-            return new Vector2Int(0, _vec.y / Mathf.Abs(_vec.y));
-        }
-        //horizontal
-        else if (_vec.y == 0)
-        {
-            return new Vector2Int(_vec.x / Mathf.Abs(_vec.x), 0);
-        }
-        else
-        {
-            return Mathf.Abs(_vec.x) >= Mathf.Abs(_vec.y) ?
-                new Vector2Int(_vec.x / Mathf.Abs(_vec.x), 0)
-                : new Vector2Int(0, _vec.y / Mathf.Abs(_vec.y));
-        }
+        return new Vector2(_vec2.x * _factor, _vec2.y);
     }
 
-    public static int ManhattanDist(this Vector2Int _lhs, Vector2Int _rhs)
+    public static Vector2 ScaleY(this Vector2 _vec2, float _factor)
     {
-        return Mathf.Abs(_lhs.x - _rhs.x) + Mathf.Abs(_lhs.y - _rhs.y);
+        return new Vector2(_vec2.x, _vec2.y * _factor);
     }
 
-    /// <summary>
-    /// Vector2 -> Vector2Int
-    /// It's a round convertion
-    /// </summary>
-    /// <param name="_vec2"></param>
-    public static Vector2Int ToVector2Int(this Vector2 _vec2)
+    public static Vector2 FlipX(this Vector2 _vec2)
     {
-        return new Vector2Int(Mathf.RoundToInt(_vec2.x), Mathf.RoundToInt(_vec2.y));
+        return new Vector2(-_vec2.x, _vec2.y);
     }
 
-    public static Vector2Int GetNormalized2DInt(this Vector2 _vec)
+    public static Vector2 FlipY(this Vector2 _vec2)
     {
-        if (_vec.x == 0 && _vec.y == 0)
-        {
-            return new Vector2Int(0, 0);
-        }
-        //vertical
-        else if (_vec.x == 0)
-        {
-            return new Vector2Int(0, Mathf.RoundToInt(_vec.y / Mathf.Abs(_vec.y)));
-        }
-        //horizontal
-        else if (_vec.y == 0)
-        {
-            return new Vector2Int(Mathf.RoundToInt(_vec.x / Mathf.Abs(_vec.x)), 0);
-        }
-        //diagonal
-        else
-        {
-            return new Vector2Int(Mathf.RoundToInt(_vec.x / Mathf.Abs(_vec.x)), Mathf.RoundToInt(_vec.y / Mathf.Abs(_vec.y)));
-        }
+        return new Vector2(_vec2.x, -_vec2.y);
     }
 }
